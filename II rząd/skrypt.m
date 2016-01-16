@@ -14,6 +14,9 @@ for i = 1:length(T)
     num = 1;
     den = [T(i) 1 ];
     delay = 1;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = delay + 6*T(i);
     if (T(i)< 10)
         stepSize = T(i)/100;
@@ -23,10 +26,10 @@ for i = 1:length(T)
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 0.01 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 0.01 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1 ];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -41,6 +44,15 @@ for i = 1:length(T)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    figure()
+    simTime = simTime + 20;
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 
@@ -51,6 +63,9 @@ for i = 1:length(T)
     num = 1;
     den = [T(i)^2 2*T(i) 1];
     delay = 1;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = delay + 6*T(i);
     if (T(i)< 10)
         stepSize = T(i)/100;
@@ -60,10 +75,10 @@ for i = 1:length(T)
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 T(i)/2 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 T(i)/2 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -78,6 +93,15 @@ for i = 1:length(T)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 40 + 2*T(i);
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 %% P3
@@ -88,6 +112,9 @@ for i = 1:length(T)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = 0;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 6 + 6*T(i);
     if (T(i)< 10)
         stepSize = T(i)/100;
@@ -97,10 +124,10 @@ for i = 1:length(T)
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 T(i)/2 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 T(i)/2 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -115,6 +142,15 @@ for i = 1:length(T)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * T(i) + 20;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 %% P4
@@ -125,15 +161,18 @@ for i = 1:length(n)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = 0;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 6*n(i);
     stepSize = 0.1;
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 0.01 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 0.01 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -148,6 +187,15 @@ for i = 1:length(n)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * n(i) + 40;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 %% P5
@@ -158,6 +206,9 @@ for i = 1:length(a)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = 0;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 6 + 6*a(i);
     if (a(i)< 10)
         stepSize = a(i)/100;
@@ -167,10 +218,10 @@ for i = 1:length(a)
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 a(i)/2 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 a(i)/2 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -185,6 +236,15 @@ for i = 1:length(a)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * a(i) + 40;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 %% P6
@@ -196,6 +256,9 @@ for i = 1:length(L1)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = L1(i);
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 6+6*T1;
     if (T1 < 10 & T1 ~= 0)
         stepSize = T1/100;
@@ -205,10 +268,10 @@ for i = 1:length(L1)
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 0.01 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 0.01 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -223,6 +286,15 @@ for i = 1:length(L1)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * L1(i) + 20;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 
@@ -237,6 +309,9 @@ for i = 1:length(T)
         num = rep.num{1,1}; 
         den = rep.den{1,1};
         delay = L1(j);
+        num2 = num;
+        den2 = den;
+        delay2 = delay;
         simTime = 7*T(i) + 6*T1;
         if (T1 ~= 0)
             stepSize = T1/100;
@@ -246,10 +321,10 @@ for i = 1:length(T)
         figure();
         sim('single_object');
         res = Y.signals.values;
-        [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 T(i)/2 0.01]);
+        [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 T(i)/2 T(i)/2 0.01]);
         num = X(1);
-        den = [X(2) 1];
-        delay = X(3);
+        den = [X(2)*X(3) X(2)+X(3) 1 ];
+        delay = X(4);
         sim('single_object');
         subplot(2,1,1);
         plot(Y.time,res,Y.time,Y.signals.values);
@@ -264,6 +339,15 @@ for i = 1:length(T)
         xlabel('Czas');
         ylabel('Wartoœæ');
         grid on;
+        
+        simTime = simTime + 2 * T(i) + 60;
+        figure()
+        sim('object_PI');
+        plot(Y.time,Y.signals.values);
+        grid on;
+        title('Odpowiedzi skokowe obiektów z regulatorem PID');
+        xlabel('Czas');
+        ylabel('Wartoœæ');
     end
  end
 
@@ -275,15 +359,18 @@ for i = 1:length(a)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = 0;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 20;
     stepSize = 0.01;
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 0.01 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 0.01 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -298,6 +385,15 @@ for i = 1:length(a)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * a(i) + 100;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
 
 %% P9
@@ -308,15 +404,18 @@ for i = 1:length(T)
     num = rep.num{1,1}; 
     den = rep.den{1,1};
     delay = 0;
+    num2 = num;
+    den2 = den;
+    delay2 = delay;
     simTime = 6 + 8*T(i);
     stepSize = 0.01;
     figure();
     sim('single_object');
     res = Y.signals.values;
-    [X,FVAL] = fmincon(@myfun1,[1 1 1],[],[],[],[],[0.01 T(i)/2 0.01]);
+    [X,FVAL] = fmincon(@myfun1,[1 1 1 1],[],[],[],[],[0.01 T(i)/2 0.01 0.01]);
     num = X(1);
-    den = [X(2) 1];
-    delay = X(3);
+    den = [X(2)*X(3) X(2)+X(3) 1 ];
+    delay = X(4);
     sim('single_object');
     subplot(2,1,1);
     plot(Y.time,res,Y.time,Y.signals.values);
@@ -331,4 +430,13 @@ for i = 1:length(T)
     xlabel('Czas');
     ylabel('Wartoœæ');
     grid on;
+    
+    simTime = simTime + 2 * T(i) + 40;
+    figure()
+    sim('object_PI');
+    plot(Y.time,Y.signals.values);
+    grid on;
+    title('Odpowiedzi skokowe obiektów z regulatorem PID');
+    xlabel('Czas');
+    ylabel('Wartoœæ');
  end
