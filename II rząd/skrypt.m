@@ -47,6 +47,9 @@ for i = 1:length(T)
     
     figure()
     simTime = simTime + 20;
+    if simTime > 200
+        simTime = 200;
+    end
     sim('object_PI');
     plot(Y.time,Y.signals.values);
     grid on;
@@ -260,7 +263,7 @@ for i = 1:length(L1)
     den2 = den;
     delay2 = delay;
     simTime = 6+6*T1;
-    if (T1 < 10 & T1 ~= 0)
+    if (T1 < 10 && T1 ~= 0)
         stepSize = T1/100;
     else
         stepSize = 0.1;
